@@ -1,0 +1,14 @@
+
+{% if status == "SUCCESS" %}
+<span class="badge badge-success">Success</span>
+{% elif status == "FAILURE" %}
+<span class="badge badge-danger">Failed</span>
+{% elif status == "PENDING" %}
+<span class="badge badge-warning">Pending</span>
+{% elif status == "RETRY" %}
+<span class="badge badge-warning">Retry</span>
+{% elif status == "STARTED" %}
+<span class="badge badge-warning">Started</span>
+{% else %}
+<span class="badge badge-secondary">Revoked</span>
+{% endif %}

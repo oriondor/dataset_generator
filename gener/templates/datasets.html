@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}{{schema.name}}{% endblock %}
+
+{% block contentsh %}
+<h2>{{schema.name}}</h2>
+<form method="POST" action="{% url 'generate_set' id=schema.id %}">
+	{% csrf_token %}
+	<div class="form-row">
+		<div class="col-xs-2">
+	      <input type="text" id='rows_count' name='rows_count' class="form-control input-sm" placeholder="Rows" value="50">
+	    </div>
+	    <div class="col">
+	      <button type="submit" class="btn btn-success">Generate data</button>
+	    </div>
+	</div>
+</form>
+<table class='table'>
+	<tr>
+		<th>Number</th>
+		<th>Created</th>
+		<th>Status</th>
+		<th>Action</th>
+	</tr>
+	{% for dataset in datasets %}
+	<tr>
+		<td>{{dataset.id}}</td>
+		<td>{{dataset.date_created}}</td>
+		<td id="{{dataset.task_id}}"></td>
+		<td><a class="download hidden" href="{% url 'download' filename=dataset.id %}">Download</a></td>
+	</tr>
+	{% empty %}
+	{% endfor %}
+</table>
+<script type="text/javascript">
+	$(function(){
+		setInterval(function(){
+			console.log("Checking");
+		{% for dataset in datasets %}
+			$.ajax({
+				url:"/check_status",
+				data:{task_id:'{{dataset.task_id}}'},
+				success:function(data){
+					$("#{{dataset.task_id}}").html(data);
+					if($("<div>"+data+"<div>").find('.badge').html() == 'Success'){
+						$("#{{dataset.task_id}}").parent().find('.download').removeClass('hidden');}
+				},
+				error:function(data){
+					console.log(data);
+				}
+			});
+		{% endfor %}
+	},5000);
+});
+</script>
+{% endblock %}

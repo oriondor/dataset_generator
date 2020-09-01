@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Новая схема{% endblock %}
+
+{% block contentsh %}
+{% load static %}
+{% for error in errors %}
+<div class="alert alert-danger" role="alert">
+  {{error}}
+</div>
+{% empty %}
+{% endfor %}
+	<script type="text/javascript" src="{% static 'add_columns.js' %}"></script>
+	<form method="POST">{% csrf_token %}
+		<div class="form-group">
+	    <label for="schema_name">Schema name</label>
+	    {% if existing_schema %}
+	    <input type="text" class="form-control" name="name" id="schema_name" value='{{existing_schema.name}}'>
+	    {% else %}
+	    <input type="text" class="form-control" name="name" id="schema_name">
+	    {% endif %}
+	  </div>
+	  <div class="form-group">
+	    <label for="separator">Column separator</label>
+	    <select name='col_sep' class="form-control" id="separator">
+	    	{% if existing_schema %}
+	      <option value="{{existing_schema.col_sep}}">{{existing_schema.col_sep}}</option>
+	    	{% endif %}
+	      <option value=",">Comma(,)</option>
+	    </select>
+	  </div>
+	  <div class="form-group">
+	    <label for="string_char">String character</label>
+	    <select name='str_chr' class="form-control" id="string_char">
+	    	{% if existing_schema %}
+	      <option value="{{existing_schema.str_chr}}">{{existing_schema.str_chr}}</option>
+	    	{% endif %}
+	      <option value='"'>Double-quote(")</option>
+	      <option value="'">Single-quote(')</option>
+	    </select>
+	  </div>
+	  <div id="columns">
+	  	<h3>Schema columns</h3>
+	  	<button type="button" id="add_column" class="btn btn-warning">Add column</button>
+	  </div> 	
+	  
+	 <script type="text/javascript">
+		{% if existing_schema %}
+	  	{% for column in existing_schema.columns %}
+	  		add_new_column("{{column.0}}","{{column.1}}","{{column.2}}","{{column.3}}");
+	  	{% endfor %}
+	  	{% endif %}
+	  	
+	  </script>
+
+	  <button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+
+	
+
+{% endblock %}

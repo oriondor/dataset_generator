@@ -1,0 +1,7 @@
+django
+postgres
+psycopg2
+requests
+Celery
+redis
+CacheControl

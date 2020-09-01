@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Доступные схемы{% endblock %}
+
+{% block contentsh %}
+<a href="{% url 'new_schema' %}"><button type="button" class="btn btn-success">New schema</button></a>
+
+<table class='table'>
+	<tr>
+		<th>Number</th>
+		<th>User</th>
+		<th>Name</th>
+		<th>Date created</th>
+		<th>Actions</th>
+	</tr>
+	{% for schema in schemas %}
+	<tr>
+		<td>{{schema.id}}</td>
+		<td>{{schema.user}}</td>
+		<td><a href="{% url 'view_schema' id=schema.id %}">{{schema.name}}</a></td>
+		<td>{{schema.date_created}}</td>
+		<td>
+			<a href="{% url 'edit_schema' id=schema.id %}">Edit</a>
+			<a style='color:red;' href="{% url 'delete_schema' id=schema.id %}">Delete</a>
+		</td>
+	</tr>
+	{% empty %}
+	{% endfor %}
+</table>
+{% endblock %}

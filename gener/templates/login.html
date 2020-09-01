@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Вход{% endblock %}
+
+{% block contentsh %}
+
+{% for error in errors %}
+<div class="alert alert-danger" role="alert">
+  {{error}}
+</div>
+{% empty %}
+{% endfor %}
+
+<form method="POST">{% csrf_token %}
+<div class="form-group">
+    <label for="login">Login</label>
+    <input type="text" class="form-control" name="username" id="login" >
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+	
+</form>
+
+<a href="{% url 'register' %}"><button type="button" class="btn btn-warning">Register</button></a>
+{% endblock %}
