@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as django_logout
 from django.http import HttpResponse, Http404
 from django.contrib.auth.models import User
+from django.core.files.storage import default_storage
 from .models import DataSchema,DataSet
 from . import tasks
 import datetime
@@ -161,12 +162,14 @@ def check_status(request):
 
 
 def download(request, filename):
-	if os.path.exists(f'datasets/{filename}.csv'):
+	if default_storage.exists(f'{filename}'):
 		print('exists')
-		with open(f'datasets/{filename}.csv', 'rb') as fh:
-			response = HttpResponse(fh.read(), content_type="text/csv")
-			response['Content-Disposition'] = 'attachment; filename=' + f'datasets/{filename}.csv'
-			return response
+		file = default_storage.open(f'{filename}','r')
+		response = HttpResponse(file, content_type="text/csv")
+		response['Content-Disposition'] = 'attachment; filename=' + f'{filename}.csv'
+		file.close()
+		return response
+	print("error")
 	raise Http404
 
 from django.template.defaulttags import register as reg_fil

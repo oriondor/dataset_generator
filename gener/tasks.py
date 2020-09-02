@@ -7,6 +7,8 @@ import csv
 from django.http import HttpResponse
 from cachecontrol import CacheControl
 
+from django.core.files import File
+from django.core.files.storage import default_storage
 
 def random_string_generator(fr,to):
 	lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
@@ -100,7 +102,7 @@ def create_file(params,rows_count,filename):
 		if row<int(rows_count)-1:
 			string+='\n'
 		strings.append(string)
-	with open(f'datasets/{filename}.csv', 'w') as f:
+	with default_storage.open(f'{filename}', 'w') as f:
 		f.write(heading+'\n')
 		for string in strings:
 			f.write(str(string))

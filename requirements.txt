@@ -5,3 +5,5 @@ requests
 Celery
 redis
 CacheControl
+django-storages
+boto3
